@@ -20,15 +20,15 @@ class TaskApiController {
         return json_decode($this->data);
     }
 
-    public function getAll() {
+    public function getTasks() {
 
         try {
             // Obtener todas las tareas del modelo
             $tareas = $this->model->getAll();
             if($tareas){
                 $response = [
-               "status" => 200,
-               "data" => $tareas
+                "status" => 200,
+                "data" => $tareas
                ];
                 $this->view->response($response, 200);
             //    $this->view->response($tareas, 200);

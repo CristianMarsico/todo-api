@@ -1,19 +1,29 @@
-# Documentación de funciones del controlador `TaskApiController`
-
+# https://markdown.es/sintaxis-markdown/
 ## Índice
-1. [Función `getAll()`](#función-getall)
-2. [Función `getTask()`](#función-gettask)
+1. [TaskApiController](#documentación-taskapicontroller)
+    - [Función `getTasks()`](#función-gettasks)
+    - [Función `getTask()`](#función-gettask)
+2. [UserApiController](#documentación-userapicontroller)
+    - [Función `getAllUsers()`](#función-getallusers)
+    - [Función `getUser()`](#función-getuser)
 3. [Requisitos y notas adicionales](#requisitos-y-notas-adicionales)
 
-## Función `getAll()`
+___
 
-## Descripción
-La función `getAll` del controlador obtiene todas las tareas de la base de datos y envía una respuesta adecuada al cliente basado en el resultado.
+# Documentación `TaskApiController`
+## Introducción
+El TaskApiController es una clase encargada de manejar las solicitudes relacionadas con las tareas dentro de nuestra aplicación. Actúa como un intermediario entre el cliente y el modelo de datos, proporcionando una interfaz para interactuar con las tareas a través de varias operaciones CRUD (Crear, Leer, Actualizar, Eliminar). El objetivo principal del TaskApiController es facilitar una gestión eficiente y organizada de las tareas, garantizando que todas las operaciones se realicen de manera coherente y segura.
+A continuación se detallan cada una de sus funciones.
+
+## Función `getTasks()`
+
+### Descripción
+La función `getTasks` del controlador obtiene todas las tareas de la base de datos y envía una respuesta adecuada al cliente basado en el resultado.
 
 ### CÓDIGO ESCRITO A MANO (COPY - PASTE DEL CONTROLADOR)
 
 ```php
-public function getAll() {
+public function getTasks() {
     try {
         // Obtener todas las tareas del modelo
         $tareas = $this->model->getAll();
@@ -110,7 +120,7 @@ ___
 
 ## Función `getTask()`
 
-## Descripción
+### Descripción
 La función `getTask` del controlador obtiene una tarea específica de la base de datos y envía una respuesta adecuada al cliente basado en el resultado.
 
 ### CÓDIGO ESCRITO A MANO (COPY - PASTE DEL CONTROLADOR)
@@ -129,8 +139,6 @@ public function getTask($params = null) {
                 "data" => $tarea
                ];
                 $this->view->response($response, 200);
-            //    $this->view->response($tareas, 200);
-
             }
             else
                 // Si exite la tarea, retorna un mensaje con un código 404 (no encontrado)
@@ -164,8 +172,7 @@ Si la tarea con el ID proporcionado existe, la función enviará una respuesta c
             "id": 1,
             "nombre": "Tarea 1",
             "descripcion": "Descripción de la tarea 1"
-        },
-        ...
+        }
     ]
 }
 ```
@@ -177,7 +184,7 @@ Si no existe una tarea con el ID proporcionado, la función enviará una respues
 {
    {
     "status": 404,
-    "message": "No hay tareas en la base de datos"
+    "message": "No existe la tarea con id: 1"
    }
 }
 ```
@@ -199,9 +206,37 @@ Si ocurre un error del servidor, la función enviará una respuesta con código 
 - **Asegúrate de manejar adecuadamente las excepciones y errores en el modelo y la vista para evitar problemas inesperados.** 
 
 
+
+___
+
+# Documentación `UserApiController`
+## Introducción
+............................................
+..............................................
+.................................................
+
+## Función `getAllUsers()`
+
+### Descripción
+............................................
+..............................................
+.................................................
+
+
+## Función `getUser()`
+
+### Descripción
+............................................
+..............................................
+.................................................
+
+
+
+
 ___
 
 
 ## Requisitos y notas adicionales
-- Modelo que implemente los métodos `getAll`, `getTask`.
+- Modelo de tarea debe implementar los siguientes métodos `getTasks`, `getTask`.
+- Modelo de usuario debe implementar los siguientes métodos `getAllUsers`, `getUser`.
 - Vista que implemente el método `response`.
