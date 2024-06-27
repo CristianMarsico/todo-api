@@ -11,13 +11,17 @@ class TaskModel extends Model{
     (HACER LO MISMO EN LOS CONTROLADORES Y VISTAS)
     */
 
-    function getAll(){
+    function getAll($atr = null, $order= null){
         //abrimos la conexion;
         $db = $this->createConexion();
        
-        //Enviar la consulta
-        $sentencia = $db->prepare("SELECT * FROM tarea");
+        if(!$atr){
+            $sentencia = $db->prepare("SELECT * FROM tarea");
+        }else{
+            $sentencia = $db->prepare("SELECT * FROM tarea order by $atr $order");
+        }
         $sentencia->execute();
+        //Enviar la consulta
         $tareas = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $tareas;
     }
@@ -28,7 +32,8 @@ class TaskModel extends Model{
        
         //Enviar la consulta
         $resultado= $db->prepare("INSERT INTO tarea (nombre, descripcion, prioridad) VALUES (?,?,?)");
-        $resultado->execute([$nombre, $descr, $prioridad]); // ejecuta
+        $resultado->execute([$nombre, $descr, $prioridad]);
+        return $db->lastInsertId();
     }
     
     

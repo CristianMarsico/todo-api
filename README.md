@@ -3,70 +3,26 @@
 1. [TaskApiController](#documentación-taskapicontroller)
     - [Función `getTasks()`](#función-gettasks)
     - [Función `getTask()`](#función-gettask)
-2. [UserApiController](#documentación-userapicontroller)
-    - [Función `getAllUsers()`](#función-getallusers)
-    - [Función `getUser()`](#función-getuser)
+2. [Aclaraciones Importantes!!!](#aclaraciones)
+  
 3. [Requisitos y notas adicionales](#requisitos-y-notas-adicionales)
 
 ___
 
 # Documentación `TaskApiController`
-## Introducción
-El TaskApiController es una clase encargada de manejar las solicitudes relacionadas con las tareas dentro de nuestra aplicación. Actúa como un intermediario entre el cliente y el modelo de datos, proporcionando una interfaz para interactuar con las tareas a través de varias operaciones CRUD (Crear, Leer, Actualizar, Eliminar). El objetivo principal del TaskApiController es facilitar una gestión eficiente y organizada de las tareas, garantizando que todas las operaciones se realicen de manera coherente y segura.
-A continuación se detallan cada una de sus funciones.
 
 ## Función `getTasks()`
 
-### Descripción
 La función `getTasks` del controlador obtiene todas las tareas de la base de datos y envía una respuesta adecuada al cliente basado en el resultado.
 
-### CÓDIGO ESCRITO A MANO (COPY - PASTE DEL CONTROLADOR)
+## Ejemplos de uso
+### Ejemplo 1: Obtención exitosa de tareas.
+### Method: `GET`.
+### URL: `todo-api/api/tareas`.
 
-```php
-public function getTasks() {
-    try {
-        // Obtener todas las tareas del modelo
-        $tareas = $this->model->getAll();
-        
-        if ($tareas) {
-            // Si hay tareas, devolverlas con un código 200 (éxito)
-            $response = [
-                "status" => 200,
-                "data" => $tareas
-            ];
-            $this->view->response($response, 200);
-        } else {
-            // Si no hay tareas, devolver un mensaje con un código 404 (no encontrado)
-            $response = [
-                "status" => 404,
-                "message" => "No hay tareas en la base de datos"
-            ];
-            $this->view->response($response, 404);
-        }
-    } catch (Exception $e) {
-        // En caso de error del servidor, devolver un mensaje con un código 500 (error del servidor)
-        $response = [
-            "status" => 500,
-            "message" => "Error de servidor: " . $e->getMessage()
-        ];
-        $this->view->response($response, 500);
-    }
-}
-```
+A continuacíon se detalla imágen de la URL:
 
-### CÓDIGO GUARDADO COMO IMAGEN
-#### REALIZAR CAPTURA -> GUARDARLA EN CARPETA CORRESPONDIETE
-![Imágen del código de la función getAll](img/img-tasks/getAll.JPG)
-
-### Retorno
-La función no retorna ningún valor directamente. En su lugar, envía una respuesta al cliente utilizando el objeto `view`. Los posibles códigos de estado de respuesta son:
-
-- **200 OK:** Si se obtuvieron tareas correctamente.
-- **404 Not Found:** Si no hay tareas en la base de datos.
-- **500 Internal Server Error:** Si ocurre un error del servidor al intentar obtener las tareas.
-
-## Ejemplos de uso `http://localhost/proyectos/todo-api/api/tareas`
-### Ejemplo 1: Obtención exitosa de tareas
+![Imágen URL para uso en postman](img/img-tasks/URL_POSTMAN-GET_ALL.JPG)
 
 Si hay tareas en la base de datos, la función enviará una respuesta con código 200 y las tareas en formato JSON:
 ```json
@@ -82,6 +38,24 @@ Si hay tareas en la base de datos, la función enviará una respuesta con códig
     ]
 }
 ```
+## Ejemplos de uso Query Params
+ A continuación se detallan los posibles parámetros que puede recibir la URL:
+- **atribute**; permite filtrar por los siguiente atributos, los valores que puede tomar son los siguientes:
+    - id
+    - nombre
+    - descripcion
+    - prioridad
+    - finalizada
+    
+- **order** Permite ordenar dichos atributos, los valores que puede tomar son los siguientes:
+    - ASC
+    - DESC
+
+### Ejemplo de URL con parámetros: `?atribute=nombre&order=asc`.
+
+A continuacíon se detalla imágen de la URL:
+
+![Imágen URL usando Query Params](img/img-tasks/URL_POSTMAN-GET_ALL_QPARAMS.JPG)
 
 ### Ejemplo 2: Tareas no encontradas
 
@@ -105,63 +79,25 @@ Si ocurre un error del servidor, la función enviará una respuesta con código 
     "message": "Error de servidor: [detalles del error]"
 }
 ```
-
-### Notas 
-
-- **La inclusión del mensaje de excepción (`$e->getMessage()`) en la respuesta de error del servidor puede ser útil para depuración, pero puede exponer detalles sensibles del servidor. Considera esta práctica con cuidado, especialmente en entornos de producción.** 
-- **Asegúrate de manejar adecuadamente las excepciones y errores en el modelo y la vista para evitar problemas inesperados.** 
-
-
-
 ___
-
-
-
 
 ## Función `getTask()`
 
-### Descripción
 La función `getTask` del controlador obtiene una tarea específica de la base de datos y envía una respuesta adecuada al cliente basado en el resultado.
 
-### CÓDIGO ESCRITO A MANO (COPY - PASTE DEL CONTROLADOR)
-
-```php
-public function getTask($params = null) {
-        $id = $params[':ID'];
-
-        try {
-            // Obtiene una tarea del modelo
-            $tarea = $this->model->get($id);
-            // Si existe la tarea, la retorna con un código 200 (éxito)
-            if($tarea){
-                $response = [
-                "status" => 200,
-                "data" => $tarea
-               ];
-                $this->view->response($response, 200);
-            }
-            else
-                // Si exite la tarea, retorna un mensaje con un código 404 (no encontrado)
-                 $this->view->response("No existe la tarea con id: $id", 404);
-        } catch (Exception $e) {
-            // En caso de error del servidor, devolver un mensaje con un código 500 (error del servidor)
-            $this->view->response("Error de servidor", 500);
-        }
-
-    }  
-```
 ### Parámetros
 **`$params (array)`: Un array asociativo que contiene los parámetros de la solicitud. En este caso, se espera que contenga '`:ID`', el identificador de la tarea que se desea obtener.**
 
-### Retorno
-La función no retorna ningún valor directamente. En su lugar, envía una respuesta al cliente utilizando el objeto `view`. Los posibles códigos de estado de respuesta son:
 
-- **200 OK:** Si se obtuvieron tareas correctamente.
-- **404 Not Found:** Si no hay tareas en la base de datos.
-- **500 Internal Server Error:** Si ocurre un error del servidor al intentar obtener las tareas.
+## Ejemplos de uso
+### Ejemplo 1: Obtención exitosa de una tarea.
+### Method: `GET`.
+### Params: `{id}`.
+### URL: `todo-api/api/tareas/1`.
 
-## Ejemplos de uso `http://localhost/proyectos/todo-api/api/tareas/1`
-### Ejemplo 1: Obtención exitosa de la tarea
+A continuacíon se detalla imágen de la URL:
+
+![Imágen URL para uso en postman](img/img-tasks/URL_POSTMAN-GET_ONE.JPG)
 
 Si la tarea con el ID proporcionado existe, la función enviará una respuesta con código 200 y la tarea en formato JSON:
 ```json
@@ -199,42 +135,13 @@ Si ocurre un error del servidor, la función enviará una respuesta con código 
     "message": "Error de servidor: [detalles del error]"
 }
 ```
-
-### Notas 
-
-- **La inclusión del mensaje de excepción (`$e->getMessage()`) en la respuesta de error del servidor puede ser útil   para depuración, pero puede exponer detalles sensibles del servidor. Considera esta práctica con cuidado, especialmente en entornos de producción.** 
-- **Asegúrate de manejar adecuadamente las excepciones y errores en el modelo y la vista para evitar problemas inesperados.** 
-
-
-
 ___
 
-# Documentación `UserApiController`
-## Introducción
-............................................
-..............................................
-.................................................
+# Aclaraciones
 
-## Función `getAllUsers()`
-
-### Descripción
-............................................
-..............................................
-.................................................
-
-
-## Función `getUser()`
-
-### Descripción
-............................................
-..............................................
-.................................................
-
-
-
+En caso de utilizar el token, deben detallar paso a paso su forma de uso, como tambien deben detallar cuales son las funciones que tiene que recibir dicho token y la forma de como recibirlo.
 
 ___
-
 
 ## Requisitos y notas adicionales
 - Modelo de tarea debe implementar los siguientes métodos `getTasks`, `getTask`.
